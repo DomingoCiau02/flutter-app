@@ -1,0 +1,14 @@
+export 'package:app/view/list_animales_view.dart';
+export 'package:app/view/list_expdte_med_view.dart';
+export 'package:app/view/list_alimentacion_view.dart';
+export 'package:app/view/list_pesajes_view.dart';
+export 'package:app/view/new_pesaje_animal_view.dart';
+export 'package:app/view/alim_view.dart';
+export 'package:app/view/pesos_view.dart';
+export 'package:app/view/new_alimentacion_gral_view.dart';
+export 'package:app/view/new_pesaje_gral_view..dart';
+export 'package:app/models/models.dart';
+export 'package:app/view/granja_view.dart';
+export 'package:app/view/login_view.dart';
+export 'package:app/view/potrero_view.dart';
+export 'package:app/view/rancho_view.dart';

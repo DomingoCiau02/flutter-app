@@ -1,0 +1,15 @@
+export 'package:app/models/pesaje_animal.dart';
+export 'package:app/models/tarjeta_animal.dart';
+export 'package:app/models/clasificacion_animal.dart';
+export 'package:app/models/raza_animal.dart';
+export 'package:app/models/tipo_animal.dart';
+export 'package:app/models/alim_rancho_division.dart';
+export 'package:app/models/detalle_alim_division.dart';
+export 'package:app/models/tipo_alimento.dart';
+export 'package:app/models/detalle_peso_division.dart';
+export 'package:app/models/rancho_division.dart';
+export 'package:app/models/tipo_pesaje.dart';
+export 'package:app/models/usuario.dart';
+export 'package:app/models/pesaje_rancho_division.dart';
+export 'package:app/models/granja.dart';
+export 'package:app/models/rancho.dart';
