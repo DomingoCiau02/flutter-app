@@ -19,13 +19,7 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
   var pesoKG = TextEditingController();
   List<TarjetaAnimal> listaTargetaAnimalFiltro = [];
 
-  PesajeAnimal pesajeAnimal = PesajeAnimal(
-    0,
-    DateFormat('yyyy-MM-dd').format(DateTime.now()),
-    0,
-    0,
-    0,
-  );
+  PesajeAnimal pesajeAnimal = PesajeAnimal(0, DateFormat('yyyy-MM-dd').format(DateTime.now()), 0, 0, 0);
   bool listaVacia = false;
   int filaSeleccionada = -1;
   int indexFilaTabla = 0;
@@ -41,26 +35,15 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
     listaTargetaAnimalFiltro = ProvGranja.listaTargetaAnimal;
     listaVacia = true;
     if (divisionSeleccionado != null) {
-      listaTargetaAnimalFiltro =
-          listaTargetaAnimalFiltro
-              .where(
-                (animal) => animal.divisionRanchoId == divisionSeleccionado?.id,
-              )
-              .toList();
+      listaTargetaAnimalFiltro = listaTargetaAnimalFiltro.where((animal) => animal.divisionRanchoId == divisionSeleccionado?.id).toList();
     }
 
     if (tipoAnimal != null) {
-      listaTargetaAnimalFiltro =
-          listaTargetaAnimalFiltro
-              .where((animal) => animal.tipoAnimalId == tipoAnimal?.id)
-              .toList();
+      listaTargetaAnimalFiltro = listaTargetaAnimalFiltro.where((animal) => animal.tipoAnimalId == tipoAnimal?.id).toList();
     }
 
     if (razaAnimal != null) {
-      listaTargetaAnimalFiltro =
-          listaTargetaAnimalFiltro
-              .where((animal) => animal.razaAnimalId == razaAnimal?.id)
-              .toList();
+      listaTargetaAnimalFiltro = listaTargetaAnimalFiltro.where((animal) => animal.razaAnimalId == razaAnimal?.id).toList();
     }
   }
 
@@ -69,10 +52,7 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
     setState(() {
       pesajeAnimal.listaDetallesPesaje?.remove(data);
       for (int i = 0; i < pesajeAnimal.listaDetallesPesaje!.length; i++) {
-        pesajeAnimal.listaDetallesPesaje![i] = {
-          'peso': pesajeAnimal.listaDetallesPesaje![i]['peso'],
-          'indice': i,
-        };
+        pesajeAnimal.listaDetallesPesaje![i] = {'peso': pesajeAnimal.listaDetallesPesaje![i]['peso'], 'indice': i};
       }
       pesoKG.clear();
       filaSeleccionada = -1;
@@ -82,23 +62,14 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
   //al agregar un nuevo pesaje se agrega a la lista y se muestra en la tabla
   void addToTable() {
     if (pesoKG.text.isEmpty) {
-      const snackBar = SnackBar(
-        content: Text('Campo de peso vacio.'),
-        duration: Duration(seconds: 1, milliseconds: 500),
-      );
+      const snackBar = SnackBar(content: Text('Campo de peso vacio.'), duration: Duration(seconds: 1, milliseconds: 500));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       setState(() {
         if (filaSeleccionada == -1) {
-          pesajeAnimal.listaDetallesPesaje!.add({
-            'peso': pesoKG.text,
-            'indice': indexFilaTabla++,
-          });
+          pesajeAnimal.listaDetallesPesaje!.add({'peso': pesoKG.text, 'indice': indexFilaTabla++});
         } else {
-          pesajeAnimal.listaDetallesPesaje![filaSeleccionada] = {
-            'peso': pesoKG.text,
-            'indice': filaSeleccionada,
-          };
+          pesajeAnimal.listaDetallesPesaje![filaSeleccionada] = {'peso': pesoKG.text, 'indice': filaSeleccionada};
           filaSeleccionada = -1;
         }
         pesoKG.clear();
@@ -115,18 +86,10 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
         centerTitle: true,
         title: Column(
           children: [
+            Text("Nuevo pesaje", style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04)),
             Text(
-              "Nuevo pesaje",
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.04,
-              ),
-            ),
-            Text(
-              ProvGranja.granjaUsuario["nombre"],
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.055,
-                fontWeight: FontWeight.bold,
-              ),
+              ProvGranja.granjaUsuario["nombre"] ?? '',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -137,13 +100,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                 ProvGranja.botonActivo
                     ? null
                     : () {
-                      if (tipoPesaje == null ||
-                          pesajeAnimal.listaDetallesPesaje!.isEmpty ||
-                          tarjetaAnimal == null) {
+                      if (tipoPesaje == null || pesajeAnimal.listaDetallesPesaje!.isEmpty || tarjetaAnimal == null) {
                         const snackBar = SnackBar(
-                          content: Text(
-                            'Campo de división o tipo pesajes vacío.',
-                          ),
+                          content: Text('Campo de división o tipo pesajes vacío.'),
                           duration: Duration(seconds: 1, milliseconds: 500),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -157,19 +116,11 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                           tipoPesaje!,
                         );
                         setState(() {
-                          PotreroController().datoPesaje(
-                            ProvGranja,
-                            context,
-                            false,
-                          );
+                          PotreroController().datoPesaje(ProvGranja, context, false);
                         });
                       }
                     },
-            icon: const Icon(
-              Icons.save_outlined,
-              size: 37,
-              color: AppTheme.primary,
-            ),
+            icon: const Icon(Icons.save_outlined, size: 37, color: AppTheme.primary),
           ),
         ],
       ),
@@ -187,16 +138,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                   child: DropdownButton<RanchoDivision>(
                     hint: const Text("División del rancho"),
                     items:
-                        ProvGranja.listaDivisionesRancho
-                            .map<DropdownMenuItem<RanchoDivision>>((
-                              RanchoDivision value,
-                            ) {
-                              return DropdownMenuItem<RanchoDivision>(
-                                value: value,
-                                child: Text(value.nombre.toString()),
-                              );
-                            })
-                            .toList(),
+                        ProvGranja.listaDivisionesRancho.map<DropdownMenuItem<RanchoDivision>>((RanchoDivision value) {
+                          return DropdownMenuItem<RanchoDivision>(value: value, child: Text(value.nombre.toString()));
+                        }).toList(),
                     value: divisionSeleccionado,
                     icon: const Icon(Icons.arrow_drop_down_outlined),
                     underline: Container(height: .5, color: Colors.grey[800]),
@@ -217,16 +161,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                   child: DropdownButton<TipoAnimal>(
                     hint: const Text("Tipo de animal"),
                     items:
-                        ProvGranja.listaTipoAnimal
-                            .map<DropdownMenuItem<TipoAnimal>>((
-                              TipoAnimal value,
-                            ) {
-                              return DropdownMenuItem<TipoAnimal>(
-                                value: value,
-                                child: Text(value.nombre.toString()),
-                              );
-                            })
-                            .toList(),
+                        ProvGranja.listaTipoAnimal.map<DropdownMenuItem<TipoAnimal>>((TipoAnimal value) {
+                          return DropdownMenuItem<TipoAnimal>(value: value, child: Text(value.nombre.toString()));
+                        }).toList(),
                     value: tipoAnimal,
                     icon: const Icon(Icons.arrow_drop_down_outlined),
                     underline: Container(height: .5, color: Colors.grey[800]),
@@ -251,16 +188,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                   child: DropdownButton<RazaAnimal>(
                     hint: const Text("Raza del animal"),
                     items:
-                        ProvGranja.listaRazaAnimal
-                            .map<DropdownMenuItem<RazaAnimal>>((
-                              RazaAnimal value,
-                            ) {
-                              return DropdownMenuItem<RazaAnimal>(
-                                value: value,
-                                child: Text(value.nombre.toString()),
-                              );
-                            })
-                            .toList(),
+                        ProvGranja.listaRazaAnimal.map<DropdownMenuItem<RazaAnimal>>((RazaAnimal value) {
+                          return DropdownMenuItem<RazaAnimal>(value: value, child: Text(value.nombre.toString()));
+                        }).toList(),
                     value: razaAnimal,
                     icon: const Icon(Icons.arrow_drop_down_outlined),
                     underline: Container(height: .5, color: Colors.grey[800]),
@@ -282,26 +212,12 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                     hint: const Text("Animal"),
                     items:
                         listaVacia
-                            ? listaTargetaAnimalFiltro
-                                .map<DropdownMenuItem<TarjetaAnimal>>((
-                                  TarjetaAnimal value,
-                                ) {
-                                  return DropdownMenuItem<TarjetaAnimal>(
-                                    value: value,
-                                    child: Text(value.nombre.toString()),
-                                  );
-                                })
-                                .toList()
-                            : ProvGranja.listaTargetaAnimal
-                                .map<DropdownMenuItem<TarjetaAnimal>>((
-                                  TarjetaAnimal value,
-                                ) {
-                                  return DropdownMenuItem<TarjetaAnimal>(
-                                    value: value,
-                                    child: Text(value.nombre.toString()),
-                                  );
-                                })
-                                .toList(),
+                            ? listaTargetaAnimalFiltro.map<DropdownMenuItem<TarjetaAnimal>>((TarjetaAnimal value) {
+                              return DropdownMenuItem<TarjetaAnimal>(value: value, child: Text(value.nombre.toString()));
+                            }).toList()
+                            : ProvGranja.listaTargetaAnimal.map<DropdownMenuItem<TarjetaAnimal>>((TarjetaAnimal value) {
+                              return DropdownMenuItem<TarjetaAnimal>(value: value, child: Text(value.nombre.toString()));
+                            }).toList(),
                     value: tarjetaAnimal,
                     icon: const Icon(Icons.arrow_drop_down_outlined),
                     underline: Container(height: .5, color: Colors.grey[800]),
@@ -324,16 +240,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                   child: DropdownButton<TipoPesaje>(
                     hint: const Text("Tipo de pesaje"),
                     items:
-                        ProvGranja.listaTipoPesaje
-                            .map<DropdownMenuItem<TipoPesaje>>((
-                              TipoPesaje value,
-                            ) {
-                              return DropdownMenuItem<TipoPesaje>(
-                                value: value,
-                                child: Text(value.nombre.toString()),
-                              );
-                            })
-                            .toList(),
+                        ProvGranja.listaTipoPesaje.map<DropdownMenuItem<TipoPesaje>>((TipoPesaje value) {
+                          return DropdownMenuItem<TipoPesaje>(value: value, child: Text(value.nombre.toString()));
+                        }).toList(),
                     value: tipoPesaje,
                     icon: const Icon(Icons.arrow_drop_down_outlined),
                     underline: Container(height: .5, color: Colors.grey[800]),
@@ -352,10 +261,7 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                 Expanded(
                   child: Row(
                     children: [
-                      Text(
-                        "Peso:",
-                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                      ),
+                      Text("Peso:", style: TextStyle(fontSize: 16, color: Colors.grey[600])),
                       Expanded(
                         child: TextField(
                           textAlign: TextAlign.end,
@@ -364,16 +270,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
                           decoration: const InputDecoration(
                             fillColor: Color.fromARGB(0, 3, 168, 244),
                             isDense: true,
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(width: .5),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(width: .5),
-                            ),
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 0,
-                            ),
+                            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: .5)),
+                            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: .5)),
+                            contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                           ),
                         ),
                       ),
@@ -387,16 +286,9 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
               child: ListView(
                 children: [
                   DataTable(
-                    headingRowColor: MaterialStateColor.resolveWith(
-                      (states) => const Color.fromARGB(47, 33, 149, 243),
-                    ),
-                    dataRowColor: MaterialStateColor.resolveWith(
-                      (states) => const Color.fromARGB(38, 158, 158, 158),
-                    ),
-                    columns: const [
-                      DataColumn(label: Text('Peso'), numeric: true),
-                      DataColumn(label: Text('Acciones'), numeric: true),
-                    ],
+                    headingRowColor: MaterialStateColor.resolveWith((states) => const Color.fromARGB(47, 33, 149, 243)),
+                    dataRowColor: MaterialStateColor.resolveWith((states) => const Color.fromARGB(38, 158, 158, 158)),
+                    columns: const [DataColumn(label: Text('Peso'), numeric: true), DataColumn(label: Text('Acciones'), numeric: true)],
                     rows:
                         pesajeAnimal.listaDetallesPesaje!.map((data) {
                           return DataRow(
@@ -435,11 +327,7 @@ class _NewPesajeAnimalViewState extends State<NewPesajeAnimalView> {
         ),
       ),
       //boton para agregar un nuevo pesaje
-      floatingActionButton: FloatingActionButton(
-        onPressed: addToTable,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: addToTable, tooltip: 'Increment', child: const Icon(Icons.add)),
     );
   }
 }

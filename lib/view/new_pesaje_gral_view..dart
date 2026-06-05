@@ -37,12 +37,7 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
 
   //creas el showDataPiker que es el relog y le pones valores por defecto
   Future<DateTime?> crearRelog() {
-    return showDatePicker(
-      context: context,
-      initialDate: _fechaElegida,
-      firstDate: DateTime(1990),
-      lastDate: DateTime.now(),
-    );
+    return showDatePicker(context: context, initialDate: _fechaElegida, firstDate: DateTime(1990), lastDate: DateTime.now());
   }
 
   //se encarga de borrar un elemento de la lista y lo restructura.
@@ -50,11 +45,7 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
     setState(() {
       tableData.remove(data);
       for (int i = 0; i < tableData.length; i++) {
-        tableData[i] = {
-          'sexo': tableData[i]['sexo'],
-          'peso': tableData[i]['peso'],
-          'indice': i,
-        };
+        tableData[i] = {'sexo': tableData[i]['sexo'], 'peso': tableData[i]['peso'], 'indice': i};
       }
       pesoKG.clear();
       filaSeleccionada = -1;
@@ -64,25 +55,14 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
   //al agregar un nuevo pesaje se agrega a la lista y se muestra en la tabla
   void addToTable() {
     if (sexoAnimal == null || pesoKG.text.isEmpty) {
-      const snackBar = SnackBar(
-        content: Text('Campo de sexo o peso vacio.'),
-        duration: Duration(seconds: 1, milliseconds: 500),
-      );
+      const snackBar = SnackBar(content: Text('Campo de sexo o peso vacio.'), duration: Duration(seconds: 1, milliseconds: 500));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       setState(() {
         if (filaSeleccionada == -1) {
-          tableData.add({
-            'sexo': sexoAnimal,
-            'peso': pesoKG.text,
-            'indice': indexFilaTabla++,
-          });
+          tableData.add({'sexo': sexoAnimal, 'peso': pesoKG.text, 'indice': indexFilaTabla++});
         } else {
-          tableData[filaSeleccionada] = {
-            'sexo': sexoAnimal,
-            'peso': pesoKG.text,
-            'indice': filaSeleccionada,
-          };
+          tableData[filaSeleccionada] = {'sexo': sexoAnimal, 'peso': pesoKG.text, 'indice': filaSeleccionada};
           filaSeleccionada = -1;
         }
         pesoKG.clear();
@@ -99,18 +79,10 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
         centerTitle: true,
         title: Column(
           children: [
+            Text("Nuevo pesaje", style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.04)),
             Text(
-              "Nuevo pesaje",
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.04,
-              ),
-            ),
-            Text(
-              ProvGranja.granjaUsuario["nombre"],
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.055,
-                fontWeight: FontWeight.bold,
-              ),
+              ProvGranja.granjaUsuario["nombre"] ?? '',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.055, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -121,39 +93,21 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
                 ProvGranja.botonActivo
                     ? null
                     : () {
-                      if (tipoSeleccionado == null ||
-                          tableData.isEmpty ||
-                          divisionSeleccionado == null) {
+                      if (tipoSeleccionado == null || tableData.isEmpty || divisionSeleccionado == null) {
                         const snackBar = SnackBar(
-                          content: Text(
-                            'Campo de tipo, divición o pesajes vacio.',
-                          ),
+                          content: Text('Campo de tipo, divición o pesajes vacio.'),
                           duration: Duration(seconds: 1, milliseconds: 500),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         ProvGranja.botonActivo = false;
                       } else {
-                        PesosController().postPesaje(
-                          ProvGranja,
-                          _fechaElegida,
-                          tipoSeleccionado,
-                          divisionSeleccionado,
-                          tableData,
-                        );
+                        PesosController().postPesaje(ProvGranja, _fechaElegida, tipoSeleccionado, divisionSeleccionado, tableData);
                         setState(() {
-                          PotreroController().datoPesaje(
-                            ProvGranja,
-                            context,
-                            false,
-                          );
+                          PotreroController().datoPesaje(ProvGranja, context, false);
                         });
                       }
                     },
-            icon: const Icon(
-              Icons.save_outlined,
-              size: 37,
-              color: AppTheme.primary,
-            ),
+            icon: const Icon(Icons.save_outlined, size: 37, color: AppTheme.primary),
           ),
         ],
       ),
@@ -174,16 +128,9 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
             DropdownButton<RanchoDivision>(
               hint: const Text("Selecciona la división del rancho"),
               items:
-                  ProvGranja.listaDivisionesRancho
-                      .map<DropdownMenuItem<RanchoDivision>>((
-                        RanchoDivision value,
-                      ) {
-                        return DropdownMenuItem<RanchoDivision>(
-                          value: value,
-                          child: Text(value.nombre.toString()),
-                        );
-                      })
-                      .toList(),
+                  ProvGranja.listaDivisionesRancho.map<DropdownMenuItem<RanchoDivision>>((RanchoDivision value) {
+                    return DropdownMenuItem<RanchoDivision>(value: value, child: Text(value.nombre.toString()));
+                  }).toList(),
               value: divisionSeleccionado,
               icon: const Icon(Icons.arrow_drop_down_outlined),
               underline: Container(height: .5, color: Colors.grey[800]),
@@ -199,13 +146,8 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
             DropdownButton<TipoPesaje>(
               hint: const Text("Selecciona el tipo de pesaje"),
               items:
-                  ProvGranja.listaTipoPesaje.map<DropdownMenuItem<TipoPesaje>>((
-                    TipoPesaje value,
-                  ) {
-                    return DropdownMenuItem<TipoPesaje>(
-                      value: value,
-                      child: Text(value.nombre.toString()),
-                    );
+                  ProvGranja.listaTipoPesaje.map<DropdownMenuItem<TipoPesaje>>((TipoPesaje value) {
+                    return DropdownMenuItem<TipoPesaje>(value: value, child: Text(value.nombre.toString()));
                   }).toList(),
               value: tipoSeleccionado,
               icon: const Icon(Icons.arrow_drop_down_outlined),
@@ -224,30 +166,16 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(
-                  child: Text(
-                    'Selecciona la fecha: ',
-                    style: TextStyle(fontSize: 17, color: Colors.grey[600]),
-                  ),
-                ),
+                Expanded(child: Text('Selecciona la fecha: ', style: TextStyle(fontSize: 17, color: Colors.grey[600]))),
                 ElevatedButton.icon(
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.transparent,
-                    ), // Cambia "Colors.blue" por el color deseado
+                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent), // Cambia "Colors.blue" por el color deseado
                   ),
                   onPressed: () {
                     seleccionarDato();
                   },
-                  icon: const Icon(
-                    Icons.calendar_today,
-                    size: 28,
-                    color: AppTheme.primary,
-                  ),
-                  label: Text(
-                    DateFormat('yyyy-MM-dd').format(_fechaElegida),
-                    style: TextStyle(fontSize: 17, color: Colors.grey[600]),
-                  ),
+                  icon: const Icon(Icons.calendar_today, size: 28, color: AppTheme.primary),
+                  label: Text(DateFormat('yyyy-MM-dd').format(_fechaElegida), style: TextStyle(fontSize: 17, color: Colors.grey[600])),
                 ),
               ],
             ),
@@ -261,13 +189,8 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
                   child: DropdownButton<String>(
                     hint: const Text("Selecciona el sexo"),
                     items:
-                        ['Macho', 'Hembra'].map<DropdownMenuItem<String>>((
-                          String value,
-                        ) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
+                        ['Macho', 'Hembra'].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(value: value, child: Text(value));
                         }).toList(),
                     value: sexoAnimal,
                     dropdownColor: Colors.grey[200],
@@ -286,10 +209,7 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
                 const SizedBox(width: 5),
 
                 //campo de texto del pesaje.
-                Text(
-                  "Peso:",
-                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                ),
+                Text("Peso:", style: TextStyle(fontSize: 16, color: Colors.grey[600])),
                 Expanded(
                   child: TextField(
                     textAlign: TextAlign.end,
@@ -298,16 +218,9 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
                     decoration: const InputDecoration(
                       fillColor: Color.fromARGB(0, 3, 168, 244),
                       isDense: true,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(width: .5),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(width: .5),
-                      ),
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 0,
-                      ),
+                      enabledBorder: UnderlineInputBorder(borderSide: BorderSide(width: .5)),
+                      focusedBorder: UnderlineInputBorder(borderSide: BorderSide(width: .5)),
+                      contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                     ),
                   ),
                 ),
@@ -321,12 +234,8 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
               child: ListView(
                 children: [
                   DataTable(
-                    headingRowColor: MaterialStateColor.resolveWith(
-                      (states) => const Color.fromARGB(47, 33, 149, 243),
-                    ),
-                    dataRowColor: MaterialStateColor.resolveWith(
-                      (states) => const Color.fromARGB(38, 158, 158, 158),
-                    ),
+                    headingRowColor: MaterialStateColor.resolveWith((states) => const Color.fromARGB(47, 33, 149, 243)),
+                    dataRowColor: MaterialStateColor.resolveWith((states) => const Color.fromARGB(38, 158, 158, 158)),
                     columnSpacing: 40,
                     columns: const [
                       DataColumn(label: Text('Sexo')),
@@ -374,11 +283,7 @@ class _AddPesajeGralViewState extends State<AddPesajeGralView> {
       ),
 
       //boton para agregar un nuevo pesaje
-      floatingActionButton: FloatingActionButton(
-        onPressed: addToTable,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: addToTable, tooltip: 'Increment', child: const Icon(Icons.add)),
     );
   }
 }
